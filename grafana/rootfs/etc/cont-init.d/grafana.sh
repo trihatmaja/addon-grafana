@@ -6,6 +6,7 @@
 readonly CONFIG="/etc/grafana/grafana.ini"
 declare ingress_entry
 declare log_level
+declare grafana_domain
 
 # Configures Grafana with the add-on log level
 log_level="Info"
@@ -42,6 +43,9 @@ sed -i "s/secret_key.*/secret_key = ${secret}/g" "${CONFIG}"
 
 ingress_entry=$(bashio::addon.ingress_entry)
 sed -i "s#%%ingress_entry%%#${ingress_entry}#g" "${CONFIG}"
+
+grafana_domain=$(bashio::config 'grafana_domain')
+sed -i "s#%%grafana_domain%%#${grafana_domain}#g" "${CONFIG}"
 
 # Install user configured/requested Grafana plugins
 if bashio::config.has_value 'plugins'; then
